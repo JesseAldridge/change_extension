@@ -1,0 +1,29 @@
+#!/usr/bin/python
+import shutil, sys, glob, re, os
+
+def change_extensions(old_exten, new_exten):
+  for old_filename in glob.glob('*' + old_exten):
+    new_filename = re.sub('(.+)\.{}'.format(old_exten), '\g<1>.{}'.format(new_exten), old_filename)
+    shutil.move(old_filename, new_filename)
+
+def add_extension(ext):
+  for filename in os.listdir('.'):
+    if '.' in filename:
+      continue
+    shutil.move(filename, '{}.{}'.format(filename, ext))
+
+def remove_extension(ext):
+  for old_filename in glob.glob('*' + ext):
+    new_filename = re.sub('(.+)\.{}'.format(ext), '\g<1>', old_filename)
+    shutil.move(old_filename, new_filename)
+
+if __name__ == '__main__':
+  if len(sys.argv) == 3:
+    change_extensions(sys.argv[1], sys.argv[2])
+  elif len(sys.argv) == 2:
+    add_extension(sys.argv[1])
+  else:
+    print 'running test'
+    # change_extensions('py1', 'py')
+    # add_extension('foo')
+    remove_extension('foo')
